@@ -1,0 +1,18 @@
+---
+sudo: required
+
+services:
+  - docker
+
+install:
+  - docker build -t lgatica/openssh-client:latest .
+
+script:
+  - docker run --rm lgatica/openssh-client:latest sh -c 'which ssh-add || exit 1'
+
+after_success:
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push lgatica/openssh-client:latest
+
+notifications:
+  email: false
